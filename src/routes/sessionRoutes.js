@@ -9,3 +9,4 @@ router.post('/account_confirmation_resend');
 router.post('/forgot_password');
 router.put('/reset_password');
 
+export default router;
