@@ -55,8 +55,12 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  timestamps: true,
-});
+
+},
+  {
+    timestamps: true
+  }
+);
 
 UserSchema.pre('save', async function(next){
   if(this.password && this.isModified('password')){
@@ -73,23 +77,27 @@ UserSchema.methods.passwordMatch = async function (password){
 UserSchema.methods.generateResetToken = function () {
   const resetToken = crypto.randomBytes(20).toString("hex");
 
-  this.emailConfirmationToken = crypto
+  this.passwordResetToken = crypto
     .createHash("sha256")
     .update(resetToken)
     .digest("hex")
 
   this.passwordResetExpires = Date.now() + 10 * (60 * 1000);
+
+  return resetToken;
 };
 
 UserSchema.methods.generateConfirmationToken = function () {
   const confirmationToken = crypto.randomBytes(20).toString("hex");
 
-  this.passwordResetToken = crypto
+  this.emailConfirmationToken = crypto
     .createHash("sha256")
     .update(confirmationToken)
     .digest("hex")
 
   this.emailConfirmationExpires = Date.now() + 10 * (60 * 1000);
+
+  return confirmationToken;
 };
 
 export default mongoose.model('User', UserSchema);
