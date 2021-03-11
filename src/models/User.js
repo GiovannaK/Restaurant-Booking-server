@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
+import crypto from 'crypto';
 
 const {isEmail} = validator;
 
@@ -67,6 +68,28 @@ UserSchema.pre('save', async function(next){
 
 UserSchema.methods.passwordMatch = async function (password){
   return await bcrypt.compare(password, this.password);
+};
+
+UserSchema.methods.generateResetToken = function () {
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  this.emailConfirmationToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex")
+
+  this.passwordResetExpires = Date.now() + 10 * (60 * 1000);
+};
+
+UserSchema.methods.generateConfirmationToken = function () {
+  const confirmationToken = crypto.randomBytes(20).toString("hex");
+
+  this.passwordResetToken = crypto
+    .createHash("sha256")
+    .update(confirmationToken)
+    .digest("hex")
+
+  this.emailConfirmationExpires = Date.now() + 10 * (60 * 1000);
 };
 
 export default mongoose.model('User', UserSchema);
