@@ -4,7 +4,7 @@ import sendEmail from '../modules/mailer.js';
 export const register = async (req, res) => {
   try {
     const newUser = await User.create(req.body);
-    const {id, firstName, lastName, email} = newUser;
+    const {id, firstName, lastName, email, phone} = newUser;
 
     const user = await User.findOne({ email });
 
@@ -55,6 +55,7 @@ export const register = async (req, res) => {
 
     }
   } catch (error) {
+    console.log(error);
     return res.status(400).json({
       success: false,
       message: 'something went wrong, already have an account?',

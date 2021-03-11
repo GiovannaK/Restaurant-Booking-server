@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import validator from 'validator';
 import crypto from 'crypto';
 
-const {isEmail} = validator;
+const {isEmail, isMobilePhone, locale} = validator;
 
 const UserSchema = new mongoose.Schema({
   firstName: {
@@ -34,6 +34,17 @@ const UserSchema = new mongoose.Schema({
     minlength: [8, 'Password must have at least 8 characters'],
     maxlength: [255, 'Password is too long'],
     select: false,
+  },
+  phone: {
+    type: String,
+    validate: {
+      validator: function(phoneNumber){
+        return isMobilePhone(phoneNumber, 'pt-BR');
+      },
+      message: 'Invalid phone number'
+    },
+    trim: true,
+    required: [true, 'Phone number is required']
   },
   passwordResetToken: {
     type: String,
