@@ -41,9 +41,14 @@ export const register = async (req, res) => {
       return res.status(200).json({
         success: true,
         message: 'Email sent',
-        newUser,
+        firstName,
+        lastName,
+        email,
+        phone,
+        id
       })
     } catch (error) {
+      console.log(error);
       user.emailConfirmationToken = undefined;
       user.emailConfirmationExpires = undefined;
 

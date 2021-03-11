@@ -30,16 +30,16 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    select: false,
     required: [true, 'Password is required'],
     minlength: [8, 'Password must have at least 8 characters'],
     maxlength: [255, 'Password is too long'],
-    select: false,
   },
   phone: {
-    type: String,
+    type: Number,
     validate: {
       validator: function(phoneNumber){
-        return isMobilePhone(phoneNumber, 'pt-BR');
+        return isMobilePhone(String(phoneNumber), 'pt-BR');
       },
       message: 'Invalid phone number'
     },
