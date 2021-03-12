@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import validator from 'validator';
 import crypto from 'crypto';
 
-const {isEmail, isMobilePhone, locale} = validator;
+const {isEmail, isMobilePhone} = validator;
 
 const UserSchema = new mongoose.Schema({
   firstName: {
