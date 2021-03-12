@@ -101,10 +101,7 @@ UserSchema.methods.generateResetToken = function () {
 UserSchema.methods.generateConfirmationToken = function () {
   const confirmationToken = crypto.randomBytes(20).toString("hex");
 
-  this.emailConfirmationToken = crypto
-    .createHash("sha256")
-    .update(confirmationToken)
-    .digest("hex")
+  this.emailConfirmationToken = confirmationToken
 
   this.emailConfirmationExpires = Date.now() + 10 * (60 * 1000);
 
