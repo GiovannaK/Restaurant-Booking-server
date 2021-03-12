@@ -44,7 +44,8 @@ const UserSchema = new mongoose.Schema({
       message: 'Invalid phone number'
     },
     trim: true,
-    required: [true, 'Phone number is required']
+    required: [true, 'Phone number is required'],
+    unique: [true, 'Phone number must be unique']
   },
   passwordResetToken: {
     type: String,
