@@ -62,7 +62,6 @@ export const register = async (req, res) => {
 
     }
   } catch (error) {
-    console.log(error);
     return res.status(400).json({
       success: false,
       message: 'something went wrong, already have an account?',
@@ -110,6 +109,77 @@ export const accountConfirmation = async (req, res) => {
     return res.status(400).json({
       success: false,
       message: 'Cannot verify account',
+      status: 400,
+    })
+  }
+}
+
+export const accountConfirmationResend = async (req, res) => {
+  const {email} = req.body
+
+  try {
+    const user = await User.findOne({email})
+
+    if(!user){
+      return res.status(400).json({
+        success: false,
+        message: 'User not found',
+        status: 400,
+      })
+    }
+
+    if(user.isVerified){
+      return res.status(400).json({
+        success: false,
+        message: 'Account has already been verified',
+        status: 400,
+      })
+    }
+
+    const accountConfirmationToken = user.generateConfirmationToken();
+
+    await user.save();
+
+    const confirmationUrl = `http://${req.headers.host}/session/account_confirmation/${accountConfirmationToken}`
+
+    const message = `
+      <h1>Ative sua conta</h1>
+      <h4>Você está recebendo este e-mail porque se registrou
+        em nossa plataforma, clique no link abaixo para ativar sua conta.
+      </h4>
+      <a href=${confirmationUrl} clicktracking=off>${confirmationUrl}</a>
+    `;
+
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: "GetYourTable - Ative sua conta",
+        text: message,
+      })
+
+      return res.status(200).json({
+        success: true,
+        message: 'Email sent',
+        status: 200,
+      })
+    } catch (error) {
+      console.log(error);
+      user.emailConfirmationToken = undefined;
+      user.emailConfirmationExpires = undefined;
+
+      await user.save();
+      return res.status(500).json({
+        success: false,
+        message: 'Email could be not sent',
+        status: 500,
+      })
+
+    }
+
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: 'something went wrong, already have a verified account?',
       status: 400,
     })
   }
