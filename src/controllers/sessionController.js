@@ -17,7 +17,7 @@ export const register = async (req, res) => {
           status: 400
         }
       )
-    }
+    };
 
     const accountConfirmationToken = user.generateConfirmationToken();
 
@@ -38,7 +38,7 @@ export const register = async (req, res) => {
         to: user.email,
         subject: "GetYourTable - Ative sua conta",
         text: message,
-      })
+      });
 
       return res.status(200).json({
         success: true,
@@ -48,7 +48,7 @@ export const register = async (req, res) => {
         email,
         phone,
         id
-      })
+      });
     } catch (error) {
       user.emailConfirmationToken = undefined;
       user.emailConfirmationExpires = undefined;
@@ -60,20 +60,20 @@ export const register = async (req, res) => {
         status: 500,
       })
 
-    }
+    };
   } catch (error) {
     return res.status(400).json({
       success: false,
       message: 'something went wrong, already have an account?',
       status: 400,
     })
-  }
-}
+  };
+};
 
 export const accountConfirmation = async (req, res) => {
 
   try {
-    const user = await User.findOne({emailConfirmationToken: req.params.confirmationToken}).select('+emailConfirmationToken emailConfirmationExpires')
+    const user = await User.findOne({emailConfirmationToken: req.params.confirmationToken}).select('+emailConfirmationToken emailConfirmationExpires');
 
     if(!user){
       return res.status(400).json({
@@ -81,7 +81,7 @@ export const accountConfirmation = async (req, res) => {
         message: 'Invalid Token',
         status: 400,
       })
-    }
+    };
 
     const now = Date.now();
 
@@ -91,11 +91,11 @@ export const accountConfirmation = async (req, res) => {
         message: 'Token expired',
         status: 400,
       })
-    }
+    };
 
-    user.isVerified = true
-    user.emailConfirmationExpires = undefined
-    user.emailConfirmationToken = undefined
+    user.isVerified = true;
+    user.emailConfirmationExpires = undefined;
+    user.emailConfirmationToken = undefined;
 
     await user.save();
 
@@ -103,7 +103,7 @@ export const accountConfirmation = async (req, res) => {
       success: true,
       message: 'Account activated',
       status: 200,
-    })
+    });
 
   } catch (error) {
     return res.status(400).json({
@@ -111,8 +111,8 @@ export const accountConfirmation = async (req, res) => {
       message: 'Cannot verify account',
       status: 400,
     })
-  }
-}
+  };
+};
 
 export const accountConfirmationResend = async (req, res) => {
   const {email} = req.body
@@ -126,7 +126,7 @@ export const accountConfirmationResend = async (req, res) => {
         message: 'User not found',
         status: 400,
       })
-    }
+    };
 
     if(user.isVerified){
       return res.status(400).json({
@@ -134,7 +134,7 @@ export const accountConfirmationResend = async (req, res) => {
         message: 'Account has already been verified',
         status: 400,
       })
-    }
+    };
 
     const accountConfirmationToken = user.generateConfirmationToken();
 
@@ -155,13 +155,13 @@ export const accountConfirmationResend = async (req, res) => {
         to: user.email,
         subject: "GetYourTable - Ative sua conta",
         text: message,
-      })
+      });
 
       return res.status(200).json({
         success: true,
         message: 'Email sent',
         status: 200,
-      })
+      });
     } catch (error) {
       console.log(error);
       user.emailConfirmationToken = undefined;
@@ -174,7 +174,7 @@ export const accountConfirmationResend = async (req, res) => {
         status: 500,
       })
 
-    }
+    };
 
   } catch (error) {
     return res.status(400).json({
@@ -182,7 +182,7 @@ export const accountConfirmationResend = async (req, res) => {
       message: 'something went wrong, already have a verified account?',
       status: 400,
     })
-  }
+  };
 }
 
 export const login = async (req, res) => {
@@ -195,7 +195,7 @@ export const login = async (req, res) => {
         message: 'Invalid credentials',
         status: 401,
       })
-    }
+    };
 
     const user = await User.findOne({email}).select('+password');
 
@@ -205,7 +205,7 @@ export const login = async (req, res) => {
         message: 'User does not exist',
         status: 400,
       })
-    }
+    };
 
     if(!user.isVerified){
       return res.status(400).json({
@@ -213,7 +213,7 @@ export const login = async (req, res) => {
         message: 'Account not verified',
         status: 400,
       })
-    }
+    };
 
     const isPasswordMatch = await user.passwordMatch(password);
 
@@ -223,13 +223,13 @@ export const login = async (req, res) => {
         message: 'Email or password invalid',
         status: 401,
       })
-    }
+    };
 
     const {id} = user
 
     const token = jwt.sign({id, email}, process.env.TOKEN_SECRET, {
       expiresIn: process.env.TOKEN_EXPIRATION
-    })
+    });
 
     return res.status(200).json({
       success: true,
@@ -239,7 +239,7 @@ export const login = async (req, res) => {
         id,
         email
       }
-    })
+    });
 
   } catch (error) {
     return res.status(500).json({
@@ -247,8 +247,8 @@ export const login = async (req, res) => {
       message: 'Failed to login user',
       status: 500,
     })
-  }
-}
+  };
+};
 
 export const forgotPassword = async (req, res) => {
   try {
@@ -262,7 +262,7 @@ export const forgotPassword = async (req, res) => {
         message: 'No user associated with this email was found',
         status: 400,
       })
-    }
+    };
 
     const resetPasswordToken = user.generateResetToken();
 
@@ -283,7 +283,7 @@ export const forgotPassword = async (req, res) => {
         to: user.email,
         subject: "GetYourTable - Altere sua senha",
         text: message,
-      })
+      });
 
       return res.status(200).json({
         success: true,
@@ -301,7 +301,7 @@ export const forgotPassword = async (req, res) => {
         status: 500,
       })
 
-    }
+    };
 
   } catch (error) {
     return res.status(500).json({
@@ -309,8 +309,8 @@ export const forgotPassword = async (req, res) => {
       message: 'Cannot send reset password email',
       status: 500,
     })
-  }
-}
+  };
+};
 
 export const resetPassword = async (req, res) => {
   try {
@@ -324,7 +324,7 @@ export const resetPassword = async (req, res) => {
         message: 'Account does not exist',
         status: 400
       })
-    }
+    };
 
     const now = new Date();
 
@@ -334,19 +334,19 @@ export const resetPassword = async (req, res) => {
         message: 'Expired token',
         status: 400
       })
-    }
+    };
 
-    user.password = password
-    user.passwordResetToken = undefined
-    user.passwordResetExpires = undefined
+    user.password = password;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
 
-    await user.save()
+    await user.save();
 
     return res.status(200).json({
       success: true,
       message: 'Password has been changed',
       status: 200
-    })
+    });
 
   } catch (error) {
     return res.status(400).json({
@@ -354,5 +354,5 @@ export const resetPassword = async (req, res) => {
       message: 'Cannot reset password',
       status: 400
     })
-  }
-}
+  };
+};

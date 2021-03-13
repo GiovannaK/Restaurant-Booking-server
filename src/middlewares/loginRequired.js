@@ -18,8 +18,7 @@ export default async(req, res, next) => {
     const decode = jwt.verify(token, process.env.TOKEN_SECRET);
     const {id, email} = decode;
 
-    const user = await User.findById({id});
-    console.log(user);
+    const user = await User.findById({_id: id});
 
     if(!user){
       return res.status(401).json({

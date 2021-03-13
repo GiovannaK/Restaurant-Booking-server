@@ -1,7 +1,7 @@
 import express from 'express';
 import {connectDB} from '../config/database.js';
 import { config } from 'dotenv';
-import sessionRoutes from '../src/routes/sessionRoutes.js';
+import sessionRoutes from './routes/sessionRoutes.js';
 
 config();
 
