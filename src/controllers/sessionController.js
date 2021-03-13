@@ -23,7 +23,7 @@ export const register = async (req, res) => {
 
     await user.save();
 
-    const confirmationUrl = `http://${req.headers.host}/session/account_confirmation/${accountConfirmationToken}`
+    const confirmationUrl = `${process.env.BASE_URL}/session/account_confirmation/${accountConfirmationToken}`
 
     const message = `
       <h1>Ative sua conta</h1>
@@ -50,7 +50,6 @@ export const register = async (req, res) => {
         id
       })
     } catch (error) {
-      console.log(error);
       user.emailConfirmationToken = undefined;
       user.emailConfirmationExpires = undefined;
 
@@ -141,7 +140,7 @@ export const accountConfirmationResend = async (req, res) => {
 
     await user.save();
 
-    const confirmationUrl = `http://${req.headers.host}/session/account_confirmation/${accountConfirmationToken}`
+    const confirmationUrl = `${process.env.BASE_URL}/session/account_confirmation/${accountConfirmationToken}`
 
     const message = `
       <h1>Ative sua conta</h1>
@@ -246,6 +245,71 @@ export const login = async (req, res) => {
     return res.status(500).json({
       sucess: false,
       message: 'Failed to login user',
+      status: 500,
+    })
+  }
+}
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const {email} = req.body;
+
+    const user = await User.findOne({email});
+    console.log(user);
+
+    if(!user){
+      return res.status(400).json({
+        success: false,
+        message: 'No user associated with this email was found',
+        status: 400,
+      })
+    }
+
+    const resetPasswordToken = user.generateResetToken();
+
+    await user.save();
+
+    const resetPaswordUrl = `${process.env.BASE_URL}/session/reset_password/${resetPasswordToken}`
+
+    const message = `
+      <h1>Altere sua senha</h1>
+      <h4>Você está recebendo este e-mail porque se solicitou a alteração de senha
+        em nossa plataforma, clique no link abaixo para alterar sua senha.
+      </h4>
+      <a href=${resetPaswordUrl} clicktracking=off>${resetPaswordUrl}</a>
+    `;
+
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: "GetYourTable - Altere sua senha",
+        text: message,
+      })
+
+      return res.status(200).json({
+        success: true,
+        message: 'Email sent',
+        status: 200,
+      })
+    } catch (error) {
+      console.log(error);
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+
+      await user.save();
+      return res.status(500).json({
+        success: false,
+        message: 'Email could be not sent',
+        status: 500,
+      })
+
+    }
+
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({
+      success: false,
+      message: 'Cannot send reset password email',
       status: 500,
     })
   }

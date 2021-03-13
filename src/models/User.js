@@ -89,10 +89,7 @@ UserSchema.methods.passwordMatch = async function (password){
 UserSchema.methods.generateResetToken = function () {
   const resetToken = crypto.randomBytes(20).toString("hex");
 
-  this.passwordResetToken = crypto
-    .createHash("sha256")
-    .update(resetToken)
-    .digest("hex")
+  this.passwordResetToken = resetToken
 
   this.passwordResetExpires = Date.now() + 10 * (60 * 1000);
 
