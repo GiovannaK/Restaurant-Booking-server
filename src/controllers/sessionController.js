@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import sendEmail from '../modules/mailer.js';
+import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
   try {
@@ -186,5 +187,69 @@ export const accountConfirmationResend = async (req, res) => {
 }
 
 export const login = async (req, res) => {
-  
+  try {
+    const {email, password} = req.body;
+
+    if(!email || !password){
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid credentials',
+        status: 401,
+      })
+    }
+
+    const user = await User.findOne({email}).select('+password');
+
+    if(!user){
+      return res.status(400).json({
+        success: false,
+        message: 'User does not exist',
+        status: 400,
+      })
+    }
+
+    if(!user.isVerified){
+      return res.status(400).json({
+        success: false,
+        message: 'Account not verified',
+        status: 400,
+      })
+    }
+
+    const isPasswordMatch = await user.passwordMatch(password);
+
+    if(!isPasswordMatch){
+      return res.status(401).json({
+        success: false,
+        message: 'Email or password invalid',
+        status: 401,
+      })
+    }
+
+    const {id} = user
+
+    const token = jwt.sign({id, email}, process.env.TOKEN_SECRET, {
+      expiresIn: process.env.TOKEN_EXPIRATION
+    })
+
+      console.log(process.env.TOKEN_EXPIRATION);
+
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      token,
+      user: {
+        id,
+        email
+      }
+    })
+
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({
+      sucess: false,
+      message: 'Failed to login user',
+      status: 500,
+    })
+  }
 }
