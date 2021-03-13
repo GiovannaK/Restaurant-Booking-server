@@ -311,3 +311,48 @@ export const forgotPassword = async (req, res) => {
     })
   }
 }
+
+export const resetPassword = async (req, res) => {
+  try {
+    const {password} = req.body;
+
+    const user = await User.findOne({passwordResetToken: req.params.resetToken}).select('+passwordResetToken passwordResetExpires');
+
+    if(!user){
+      return res.status(400).json({
+        success: false,
+        message: 'Account does not exist',
+        status: 400
+      })
+    }
+
+    const now = new Date();
+
+    if(now > user.passwordResetExpires){
+      return res.status(400).json({
+        success: false,
+        message: 'Expired token',
+        status: 400
+      })
+    }
+
+    user.password = password
+    user.passwordResetToken = undefined
+    user.passwordResetExpires = undefined
+
+    await user.save()
+
+    return res.status(200).json({
+      success: true,
+      message: 'Password has been changed',
+      status: 200
+    })
+
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: 'Cannot reset password',
+      status: 400
+    })
+  }
+}
