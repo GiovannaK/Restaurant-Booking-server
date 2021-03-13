@@ -255,7 +255,6 @@ export const forgotPassword = async (req, res) => {
     const {email} = req.body;
 
     const user = await User.findOne({email});
-    console.log(user);
 
     if(!user){
       return res.status(400).json({
@@ -292,7 +291,6 @@ export const forgotPassword = async (req, res) => {
         status: 200,
       })
     } catch (error) {
-      console.log(error);
       user.passwordResetToken = undefined;
       user.passwordResetExpires = undefined;
 
@@ -306,7 +304,6 @@ export const forgotPassword = async (req, res) => {
     }
 
   } catch (error) {
-    console.log(error)
     return res.status(500).json({
       success: false,
       message: 'Cannot send reset password email',
