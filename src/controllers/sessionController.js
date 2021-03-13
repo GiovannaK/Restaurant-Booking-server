@@ -232,8 +232,6 @@ export const login = async (req, res) => {
       expiresIn: process.env.TOKEN_EXPIRATION
     })
 
-      console.log(process.env.TOKEN_EXPIRATION);
-
     return res.status(200).json({
       success: true,
       status: 200,
@@ -245,7 +243,6 @@ export const login = async (req, res) => {
     })
 
   } catch (error) {
-    console.log(error)
     return res.status(500).json({
       sucess: false,
       message: 'Failed to login user',
