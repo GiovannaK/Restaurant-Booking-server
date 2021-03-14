@@ -1,5 +1,5 @@
 import express from 'express';
-import {connectDB} from '../config/database.js';
+import {connectDB} from './config/database';
 import { config } from 'dotenv';
 import sessionRoutes from './routes/sessionRoutes.js';
 import userRoutes from './routes/userRoutes.js';
