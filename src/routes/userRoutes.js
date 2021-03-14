@@ -1,10 +1,11 @@
-import {Router} from 'express';
-import {show, update} from '../controllers/userController.js';
-import loginRequired from '../middlewares/loginRequired.js';
+const express = require('express');
+const {show, update} = require('../controllers/userController.js');
 
-const router = Router();
+const loginRequired = require('../middlewares/loginRequired');
+
+const router = express.Router();
 
 router.get('/profile/:userId', loginRequired, show);
 router.put('/profile/', loginRequired, update);
 
-export default router;
+module.exports = router;

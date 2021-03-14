@@ -1,21 +1,25 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const crypto = require('crypto');
-const {isEmail, isMobilePhone} = require('validator');
+const validator = require('validator');
+const crypto  = require('crypto');
 
-const UserSchema = new mongoose.Schema({
+const isEmail = validator.isEmail();
+
+const PartnerSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: [true, 'First Name is required'],
-    minlength: [3, 'First Name must have at least 3 characters'],
-    maxlength: [50, 'First Name is too long'],
+    required: [true, 'first name is required'],
+    minlength: [3, 'first name must have at least 3 characters'],
+    maxlength: [255, 'first name is too long'],
   },
+
   lastName: {
     type: String,
-    required: [true, 'Last Name is required'],
-    minlength: [3, 'Last Name must have at least 3 characters'],
-    maxlength: [50, 'Last Name is too long'],
+    required: [true, 'last name is required'],
+    minlength: [3, 'last name must have at least 3 characters'],
+    maxlength: [255, 'last name is too long'],
   },
+
   email: {
     type: String,
     unique: [true, 'Email must be unique'],
@@ -26,6 +30,7 @@ const UserSchema = new mongoose.Schema({
     minlength: [3, 'Email must have at least 3 characters'],
     maxlength: [255, 'Email is too long'],
   },
+
   password: {
     type: String,
     select: false,
@@ -33,18 +38,7 @@ const UserSchema = new mongoose.Schema({
     minlength: [8, 'Password must have at least 8 characters'],
     maxlength: [255, 'Password is too long'],
   },
-  phone: {
-    type: Number,
-    validate: {
-      validator: function(phoneNumber){
-        return isMobilePhone(String(phoneNumber), 'pt-BR');
-      },
-      message: 'Invalid phone number'
-    },
-    trim: true,
-    required: [true, 'Phone number is required'],
-    unique: [true, 'Phone number must be unique']
-  },
+
   passwordResetToken: {
     type: String,
     select: false,
@@ -72,7 +66,7 @@ const UserSchema = new mongoose.Schema({
   }
 );
 
-UserSchema.pre('save', async function(next){
+PartnerSchema.pre('save', async function(next){
   if(this.password && this.isModified('password')){
     const hash = await bcrypt.hash(this.password, 10);
     this.password = hash
@@ -80,11 +74,11 @@ UserSchema.pre('save', async function(next){
   }
 });
 
-UserSchema.methods.passwordMatch = async function (password){
+PartnerSchema.methods.passwordMatch = async function (password){
   return await bcrypt.compare(password, this.password);
 };
 
-UserSchema.methods.generateResetToken = function () {
+PartnerSchema.methods.generateResetToken = function () {
   const resetToken = crypto.randomBytes(20).toString("hex");
 
   this.passwordResetToken = resetToken
@@ -94,7 +88,7 @@ UserSchema.methods.generateResetToken = function () {
   return resetToken;
 };
 
-UserSchema.methods.generateConfirmationToken = function () {
+PartnerSchema.methods.generateConfirmationToken = function () {
   const confirmationToken = crypto.randomBytes(20).toString("hex");
 
   this.emailConfirmationToken = confirmationToken
@@ -104,4 +98,4 @@ UserSchema.methods.generateConfirmationToken = function () {
   return confirmationToken;
 };
 
-module.exports = mongoose.model('User', UserSchema);
+export default mongoose.model('Restaurant', PartnerSchema);

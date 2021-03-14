@@ -1,13 +1,12 @@
-import multer from 'multer';
-import path from 'path';
-import crypto from 'crypto';
-import multer from 'multer';
+const multer = require('multer');
+const crypto = require('crypto');
+const path = require('path');
 
-const multer = {
-  dest: path.resolve(__dirname, '..', '..', 'tmp', 'uploads'),
+module.exports = {
+  dest: path.resolve(__dirname, "..", "..", "temp", "uploads"),
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, path.resolve(__dirname, '..', '..', 'tmp', 'uploads'))
+      cb(null, path.resolve(__dirname, '..', '..', 'temp', 'uploads'))
     },
     filename: (req, file, cb) => {
       crypto.randomBytes(16, (err, hash) => {
@@ -34,7 +33,6 @@ const multer = {
       cb( new Error('File type invalid'));
     }
   },
-
 }
 
-export default multer;
+

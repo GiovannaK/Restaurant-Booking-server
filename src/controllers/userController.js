@@ -1,6 +1,6 @@
-import User from '../models/User.js';
+const User = require('../models/User');
 
-export const show = async (req, res) => {
+exports.show = async (req, res) => {
   try {
     const user = await User.findById({_id: req.params.userId});
 
@@ -19,7 +19,7 @@ export const show = async (req, res) => {
   };
 };
 
-export const update = async (req, res) => {
+exports.update = async (req, res) => {
   try {
     const user = await User.findById({_id: req.userId}).select('+password');
     if(!user){

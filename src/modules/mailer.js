@@ -1,7 +1,7 @@
-import nodemailer from 'nodemailer';
-import nodemailerSendgrid from 'nodemailer-sendgrid';
+const nodemailer = require('nodemailer');
+const nodemailerSendgrid = require('nodemailer-sendgrid');
 
-const sendEmail = (options) => {
+exports.sendEmail = (options) => {
   const transporter = nodemailer.createTransport(nodemailerSendgrid({
     apiKey: process.env.SENDGRID_API_KEY
   }));
@@ -21,5 +21,5 @@ const sendEmail = (options) => {
   });
 };
 
-export default sendEmail;
+
 

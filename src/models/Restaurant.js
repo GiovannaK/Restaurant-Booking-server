@@ -1,10 +1,12 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
-import validator from 'validator';
-import crypto from 'crypto';
-import {cnpj} from 'cpf-cnpj-validator';
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const validator = require('validator');
+const crypto = require('crypto');
+const cpfCnpj = require('cpf-cnpj-validator');
 
-const {isEmail, isMobilePhone} = validator;
+const cnpj = cpfCnpj.cnpj.isValid();
+const isEmail = validator.isEmail();
+const isMobilePhone = validator.isMobilePhone();
 
 const RestaurantSchema = new mongoose.Schema({
   companyName: {
@@ -16,26 +18,10 @@ const RestaurantSchema = new mongoose.Schema({
   cnpj: {
     type: Number,
     required: [true, 'CNPJ is required'],
-    validate: [cnpj.isValid, 'Invalid cnpj']
+    validate: [cnpj, 'Invalid cnpj']
   },
-  email: {
-    type: String,
-    unique: [true, 'Email must be unique'],
-    required: [true, 'Email is required'],
-    lowercase: true,
-    trim: true,
-    validate: [isEmail, 'Invalid email'],
-    minlength: [3, 'Email must have at least 3 characters'],
-    maxlength: [255, 'Email is too long'],
-  },
-  password: {
-    type: String,
-    select: false,
-    required: [true, 'Password is required'],
-    minlength: [8, 'Password must have at least 8 characters'],
-    maxlength: [255, 'Password is too long'],
-  },
-  phone: {
+
+  mobilePhone: {
     type: Number,
     validate: {
       validator: function(phoneNumber){
@@ -44,29 +30,18 @@ const RestaurantSchema = new mongoose.Schema({
       message: 'Invalid phone number'
     },
     trim: true,
-    required: [true, 'Phone number is required'],
-    unique: [true, 'Phone number must be unique']
+    required: [true, 'mobile phone number is required'],
+    unique: [true, 'mobile phone number must be unique']
   },
-  passwordResetToken: {
-    type: String,
-    select: false,
+
+  phone: {
+    type: Number,
+    min: [10, 'Invalid phone number'],
+    max: [10, 'Invalid phone number'],
+    required: [true, 'Phone is required'],
+    unique: [true, 'mobile phone number must be unique']
   },
-  passwordResetExpires: {
-    type: Date,
-    select: false,
-  },
-  emailConfirmationToken: {
-    type: String,
-    select: false,
-  },
-  emailConfirmationExpires: {
-    type: Date,
-    select: false,
-  },
-  isVerified: {
-    type: Boolean,
-    default: false,
-  },
+
 
   isWifi: {
     type: Boolean,
@@ -84,7 +59,7 @@ const RestaurantSchema = new mongoose.Schema({
     required: [true, 'Capacity is required']
   },
 
-  openingHours: {
+  /* openingHours: {
     monday: {
       startHours: {
         type: Number,
@@ -239,15 +214,23 @@ const RestaurantSchema = new mongoose.Schema({
         max: [59, 'end minute cannot be greather than 59'],
       }
     },
-    isOpen: {
-      type: Boolean,
-      default: false,
-    },
-    images: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Images',
-    },
-  }
+  }, */
+  isOpen: {
+    type: Boolean,
+    default: false,
+  },
+  images: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Images',
+  },
+  /* restaurantCategory: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'RestaurantCategory'
+  }, */
+  /* partner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Partner'
+  }, */
 
 },
   {

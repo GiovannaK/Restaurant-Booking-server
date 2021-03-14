@@ -1,8 +1,8 @@
-import User from '../models/User.js';
-import sendEmail from '../modules/mailer.js';
-import jwt from 'jsonwebtoken';
+const User = require('../models/User');
+const sendEmail = require('../modules/mailer.js');
+const jwt = require('jsonwebtoken');
 
-export const register = async (req, res) => {
+exports.register = async (req, res) => {
   try {
     const newUser = await User.create(req.body);
     const {id, firstName, lastName, email, phone} = newUser;
@@ -70,7 +70,7 @@ export const register = async (req, res) => {
   };
 };
 
-export const accountConfirmation = async (req, res) => {
+exports.accountConfirmation = async (req, res) => {
 
   try {
     const user = await User.findOne({emailConfirmationToken: req.params.confirmationToken}).select('+emailConfirmationToken emailConfirmationExpires');
@@ -114,7 +114,7 @@ export const accountConfirmation = async (req, res) => {
   };
 };
 
-export const accountConfirmationResend = async (req, res) => {
+exports.accountConfirmationResend = async (req, res) => {
   const {email} = req.body
 
   try {
@@ -185,7 +185,7 @@ export const accountConfirmationResend = async (req, res) => {
   };
 }
 
-export const login = async (req, res) => {
+exports.login = async (req, res) => {
   try {
     const {email, password} = req.body;
 
@@ -250,7 +250,7 @@ export const login = async (req, res) => {
   };
 };
 
-export const forgotPassword = async (req, res) => {
+exports.forgotPassword = async (req, res) => {
   try {
     const {email} = req.body;
 
@@ -312,7 +312,7 @@ export const forgotPassword = async (req, res) => {
   };
 };
 
-export const resetPassword = async (req, res) => {
+exports.resetPassword = async (req, res) => {
   try {
     const {password} = req.body;
 
