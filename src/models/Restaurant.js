@@ -1,3 +1,4 @@
+/* eslint-disable no-return-await */
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const validator = require('validator');
@@ -5,7 +6,6 @@ const crypto = require('crypto');
 const cpfCnpj = require('cpf-cnpj-validator');
 
 const cnpj = cpfCnpj.cnpj.isValid();
-const isEmail = validator.isEmail();
 const isMobilePhone = validator.isMobilePhone();
 
 const RestaurantSchema = new mongoose.Schema({
@@ -18,20 +18,20 @@ const RestaurantSchema = new mongoose.Schema({
   cnpj: {
     type: Number,
     required: [true, 'CNPJ is required'],
-    validate: [cnpj, 'Invalid cnpj']
+    validate: [cnpj, 'Invalid cnpj'],
   },
 
   mobilePhone: {
     type: Number,
     validate: {
-      validator: function(phoneNumber){
+      validator(phoneNumber) {
         return isMobilePhone(String(phoneNumber), 'pt-BR');
       },
-      message: 'Invalid phone number'
+      message: 'Invalid phone number',
     },
     trim: true,
     required: [true, 'mobile phone number is required'],
-    unique: [true, 'mobile phone number must be unique']
+    unique: [true, 'mobile phone number must be unique'],
   },
 
   phone: {
@@ -39,9 +39,8 @@ const RestaurantSchema = new mongoose.Schema({
     min: [10, 'Invalid phone number'],
     max: [10, 'Invalid phone number'],
     required: [true, 'Phone is required'],
-    unique: [true, 'mobile phone number must be unique']
+    unique: [true, 'mobile phone number must be unique'],
   },
-
 
   isWifi: {
     type: Boolean,
@@ -56,7 +55,7 @@ const RestaurantSchema = new mongoose.Schema({
   capacity: {
     type: Number,
     min: [1, 'Your restaurant must have capacity for at least 1 person'],
-    required: [true, 'Capacity is required']
+    required: [true, 'Capacity is required'],
   },
 
   /* openingHours: {
@@ -233,27 +232,26 @@ const RestaurantSchema = new mongoose.Schema({
   }, */
 
 },
-  {
-    timestamps: true
-  }
-);
+{
+  timestamps: true,
+});
 
-RestaurantSchema.pre('save', async function(next){
-  if(this.password && this.isModified('password')){
+RestaurantSchema.pre('save', async function (next) {
+  if (this.password && this.isModified('password')) {
     const hash = await bcrypt.hash(this.password, 10);
-    this.password = hash
+    this.password = hash;
     next();
   }
 });
 
-RestaurantSchema.methods.passwordMatch = async function (password){
+RestaurantSchema.methods.passwordMatch = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
 RestaurantSchema.methods.generateResetToken = function () {
-  const resetToken = crypto.randomBytes(20).toString("hex");
+  const resetToken = crypto.randomBytes(20).toString('hex');
 
-  this.passwordResetToken = resetToken
+  this.passwordResetToken = resetToken;
 
   this.passwordResetExpires = Date.now() + 10 * (60 * 1000);
 
@@ -261,9 +259,9 @@ RestaurantSchema.methods.generateResetToken = function () {
 };
 
 RestaurantSchema.methods.generateConfirmationToken = function () {
-  const confirmationToken = crypto.randomBytes(20).toString("hex");
+  const confirmationToken = crypto.randomBytes(20).toString('hex');
 
-  this.emailConfirmationToken = confirmationToken
+  this.emailConfirmationToken = confirmationToken;
 
   this.emailConfirmationExpires = Date.now() + 10 * (60 * 1000);
 

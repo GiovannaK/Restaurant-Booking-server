@@ -9,9 +9,8 @@ const RestaurantCategorySchema = new mongoose.Schema({
   },
 
 },
-  {
-    timestamps: true
-  }
-);
+{
+  timestamps: true,
+});
 
 export default mongoose.model('RestaurantCategory', RestaurantCategorySchema);

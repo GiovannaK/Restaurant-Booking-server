@@ -1,7 +1,8 @@
+/* eslint-disable no-return-await */
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const validator = require('validator');
-const crypto  = require('crypto');
+const crypto = require('crypto');
 
 const isEmail = validator.isEmail();
 
@@ -61,27 +62,26 @@ const PartnerSchema = new mongoose.Schema({
   },
 
 },
-  {
-    timestamps: true
-  }
-);
+{
+  timestamps: true,
+});
 
-PartnerSchema.pre('save', async function(next){
-  if(this.password && this.isModified('password')){
+PartnerSchema.pre('save', async function (next) {
+  if (this.password && this.isModified('password')) {
     const hash = await bcrypt.hash(this.password, 10);
-    this.password = hash
+    this.password = hash;
     next();
   }
 });
 
-PartnerSchema.methods.passwordMatch = async function (password){
+PartnerSchema.methods.passwordMatch = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
 PartnerSchema.methods.generateResetToken = function () {
-  const resetToken = crypto.randomBytes(20).toString("hex");
+  const resetToken = crypto.randomBytes(20).toString('hex');
 
-  this.passwordResetToken = resetToken
+  this.passwordResetToken = resetToken;
 
   this.passwordResetExpires = Date.now() + 10 * (60 * 1000);
 
@@ -89,9 +89,9 @@ PartnerSchema.methods.generateResetToken = function () {
 };
 
 PartnerSchema.methods.generateConfirmationToken = function () {
-  const confirmationToken = crypto.randomBytes(20).toString("hex");
+  const confirmationToken = crypto.randomBytes(20).toString('hex');
 
-  this.emailConfirmationToken = confirmationToken
+  this.emailConfirmationToken = confirmationToken;
 
   this.emailConfirmationExpires = Date.now() + 10 * (60 * 1000);
 
