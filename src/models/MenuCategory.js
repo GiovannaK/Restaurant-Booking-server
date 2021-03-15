@@ -9,9 +9,8 @@ const MenuCategorySchema = new mongoose.Schema({
   },
 
 },
-  {
-    timestamps: true
-  }
-);
+{
+  timestamps: true,
+});
 
 module.exports = mongoose.model('MenuCategory', MenuCategorySchema);

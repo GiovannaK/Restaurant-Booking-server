@@ -20,13 +20,12 @@ const TableSchema = new mongoose.Schema({
 
   restaurant: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant'
-  }
+    ref: 'Restaurant',
+  },
 
 },
-  {
-    timestamps: true
-  }
-);
+{
+  timestamps: true,
+});
 
 export default mongoose.model('Table', TableSchema);
