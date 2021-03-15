@@ -1,9 +1,9 @@
 const nodemailer = require('nodemailer');
 const nodemailerSendgrid = require('nodemailer-sendgrid');
 
-exports.sendEmail = (options) => {
+const sendEmail = (options) => {
   const transporter = nodemailer.createTransport(nodemailerSendgrid({
-    apiKey: process.env.SENDGRID_API_KEY
+    apiKey: process.env.SENDGRID_API_KEY,
   }));
 
   const mailOptions = {
@@ -13,13 +13,12 @@ exports.sendEmail = (options) => {
     html: options.text,
   };
 
-  transporter.sendMail(mailOptions, function (err, info) {
-    if(err){
-      console.log(err)
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      console.log(err);
     }
-    console.log(info)
+    console.log(info);
   });
 };
 
-
-
+module.exports = sendEmail;

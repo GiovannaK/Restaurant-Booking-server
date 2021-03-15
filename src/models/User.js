@@ -1,7 +1,8 @@
+/* eslint-disable no-return-await */
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-const {isEmail, isMobilePhone} = require('validator');
+const { isEmail, isMobilePhone } = require('validator');
 
 const UserSchema = new mongoose.Schema({
   firstName: {
@@ -36,14 +37,14 @@ const UserSchema = new mongoose.Schema({
   phone: {
     type: Number,
     validate: {
-      validator: function(phoneNumber){
+      validator(phoneNumber) {
         return isMobilePhone(String(phoneNumber), 'pt-BR');
       },
-      message: 'Invalid phone number'
+      message: 'Invalid phone number',
     },
     trim: true,
     required: [true, 'Phone number is required'],
-    unique: [true, 'Phone number must be unique']
+    unique: [true, 'Phone number must be unique'],
   },
   passwordResetToken: {
     type: String,
@@ -67,27 +68,26 @@ const UserSchema = new mongoose.Schema({
   },
 
 },
-  {
-    timestamps: true
-  }
-);
+{
+  timestamps: true,
+});
 
-UserSchema.pre('save', async function(next){
-  if(this.password && this.isModified('password')){
+UserSchema.pre('save', async function (next) {
+  if (this.password && this.isModified('password')) {
     const hash = await bcrypt.hash(this.password, 10);
-    this.password = hash
+    this.password = hash;
     next();
   }
 });
 
-UserSchema.methods.passwordMatch = async function (password){
+UserSchema.methods.passwordMatch = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
 UserSchema.methods.generateResetToken = function () {
-  const resetToken = crypto.randomBytes(20).toString("hex");
+  const resetToken = crypto.randomBytes(20).toString('hex');
 
-  this.passwordResetToken = resetToken
+  this.passwordResetToken = resetToken;
 
   this.passwordResetExpires = Date.now() + 10 * (60 * 1000);
 
@@ -95,9 +95,9 @@ UserSchema.methods.generateResetToken = function () {
 };
 
 UserSchema.methods.generateConfirmationToken = function () {
-  const confirmationToken = crypto.randomBytes(20).toString("hex");
+  const confirmationToken = crypto.randomBytes(20).toString('hex');
 
-  this.emailConfirmationToken = confirmationToken
+  this.emailConfirmationToken = confirmationToken;
 
   this.emailConfirmationExpires = Date.now() + 10 * (60 * 1000);
 

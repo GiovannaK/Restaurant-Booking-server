@@ -162,7 +162,6 @@ exports.accountConfirmationResend = async (req, res) => {
         status: 200,
       });
     } catch (error) {
-      console.log(error);
       user.emailConfirmationToken = undefined;
       user.emailConfirmationExpires = undefined;
 
