@@ -1,5 +1,5 @@
 const express = require('express');
-const {show, update} = require('../controllers/userController.js');
+const { show, update } = require('../controllers/userController.js');
 
 const loginRequired = require('../middlewares/loginRequired');
 

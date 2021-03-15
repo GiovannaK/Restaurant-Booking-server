@@ -46,6 +46,10 @@ const UserSchema = new mongoose.Schema({
     required: [true, 'Phone number is required'],
     unique: [true, 'Phone number must be unique'],
   },
+  isPartner: {
+    type: Boolean,
+    default: false,
+  },
   passwordResetToken: {
     type: String,
     select: false,

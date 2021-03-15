@@ -5,12 +5,14 @@ const {
   accountConfirmationResend,
   login,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  registerPartner,
 } = require('../controllers/sessionController');
 
 const router = express.Router();
 
 router.post('/register', register);
+router.post('/register_partners', registerPartner);
 router.post('/account_confirmation/:confirmationToken', accountConfirmation);
 router.post('/account_confirmation_resend', accountConfirmationResend);
 router.post('/login', login);
