@@ -5,10 +5,14 @@ const ImageSchema = new mongoose.Schema({
   size: Number,
   key: String,
   url: String,
+  restaurant: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Restaurant',
+  },
 },
-  {
-    timestamps: true
-  }
-);
+
+{
+  timestamps: true,
+});
 
 module.exports = mongoose.model('Images', ImageSchema);

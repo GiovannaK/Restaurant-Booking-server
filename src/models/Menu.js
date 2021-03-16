@@ -15,7 +15,7 @@ const MenuSchema = new mongoose.Schema({
   },
 
   description: {
-    type: String
+    type: String,
   },
 
   isAvailable: {
@@ -25,13 +25,12 @@ const MenuSchema = new mongoose.Schema({
 
   menuCategory: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'MenuCategory'
-  }
+    ref: 'MenuCategory',
+  },
 
 },
-  {
-    timestamps: true
-  }
-);
+{
+  timestamps: true,
+});
 
 module.exports = mongoose.model('Menu', MenuSchema);

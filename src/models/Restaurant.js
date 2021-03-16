@@ -1,12 +1,9 @@
 /* eslint-disable no-return-await */
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const validator = require('validator');
 const crypto = require('crypto');
-const cpfCnpj = require('cpf-cnpj-validator');
-
-const cnpj = cpfCnpj.cnpj.isValid();
-const isMobilePhone = validator.isMobilePhone();
+const { cnpj } = require('cpf-cnpj-validator');
+const { isMobilePhone } = require('validator');
 
 const RestaurantSchema = new mongoose.Schema({
   companyName: {
@@ -16,9 +13,9 @@ const RestaurantSchema = new mongoose.Schema({
     maxlength: [255, 'Company Name is too long'],
   },
   cnpj: {
-    type: Number,
+    type: String,
     required: [true, 'CNPJ is required'],
-    validate: [cnpj, 'Invalid cnpj'],
+    validate: [cnpj.isValid, 'Invalid cnpj'],
   },
 
   mobilePhone: {
@@ -27,7 +24,7 @@ const RestaurantSchema = new mongoose.Schema({
       validator(phoneNumber) {
         return isMobilePhone(String(phoneNumber), 'pt-BR');
       },
-      message: 'Invalid phone number',
+      message: 'Invalid mobile phone number',
     },
     trim: true,
     required: [true, 'mobile phone number is required'],
@@ -35,11 +32,11 @@ const RestaurantSchema = new mongoose.Schema({
   },
 
   phone: {
-    type: Number,
-    min: [10, 'Invalid phone number'],
-    max: [10, 'Invalid phone number'],
+    type: String,
+    minlength: [10, 'Invalid phone number'],
+    maxlength: [10, 'Invalid phone number'],
     required: [true, 'Phone is required'],
-    unique: [true, 'mobile phone number must be unique'],
+    unique: [true, 'phone number must be unique'],
   },
 
   isWifi: {
@@ -218,17 +215,13 @@ const RestaurantSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  images: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Images',
+    ref: 'User',
   },
   /* restaurantCategory: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'RestaurantCategory'
-  }, */
-  /* partner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Partner'
   }, */
 
 },
@@ -268,4 +261,4 @@ RestaurantSchema.methods.generateConfirmationToken = function () {
   return confirmationToken;
 };
 
-export default mongoose.model('Restaurant', RestaurantSchema);
+module.exports = mongoose.model('Restaurant', RestaurantSchema);
