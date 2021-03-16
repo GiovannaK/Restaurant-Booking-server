@@ -14,6 +14,7 @@ module.exports = {
     'no-console': 'off',
     'import/first': 'off',
     'no-param-reassign': 'off',
+    'linebreak-style': 'off',
     camelcase: 'off',
   },
 };
