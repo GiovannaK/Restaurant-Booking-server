@@ -55,7 +55,7 @@ const RestaurantSchema = new mongoose.Schema({
     required: [true, 'Capacity is required'],
   },
 
-  /* openingHours: {
+  openingHours: {
     monday: {
       startHours: {
         type: Number,
@@ -76,7 +76,7 @@ const RestaurantSchema = new mongoose.Schema({
         type: Number,
         min: [0, 'end minute cannot be less than 0'],
         max: [59, 'end minute cannot be greather than 59'],
-      }
+      },
     },
     tuesday: {
       startHours: {
@@ -98,7 +98,7 @@ const RestaurantSchema = new mongoose.Schema({
         type: Number,
         min: [0, 'end minute cannot be less than 0'],
         max: [59, 'end minute cannot be greather than 59'],
-      }
+      },
     },
     wednesday: {
       startHours: {
@@ -120,7 +120,7 @@ const RestaurantSchema = new mongoose.Schema({
         type: Number,
         min: [0, 'end minute cannot be less than 0'],
         max: [59, 'end minute cannot be greather than 59'],
-      }
+      },
     },
     thursday: {
       startHours: {
@@ -142,7 +142,7 @@ const RestaurantSchema = new mongoose.Schema({
         type: Number,
         min: [0, 'end minute cannot be less than 0'],
         max: [59, 'end minute cannot be greather than 59'],
-      }
+      },
     },
     friday: {
       startHours: {
@@ -164,7 +164,7 @@ const RestaurantSchema = new mongoose.Schema({
         type: Number,
         min: [0, 'end minute cannot be less than 0'],
         max: [59, 'end minute cannot be greather than 59'],
-      }
+      },
     },
     saturday: {
       startHours: {
@@ -186,7 +186,7 @@ const RestaurantSchema = new mongoose.Schema({
         type: Number,
         min: [0, 'end minute cannot be less than 0'],
         max: [59, 'end minute cannot be greather than 59'],
-      }
+      },
     },
     sunday: {
       startHours: {
@@ -208,9 +208,9 @@ const RestaurantSchema = new mongoose.Schema({
         type: Number,
         min: [0, 'end minute cannot be less than 0'],
         max: [59, 'end minute cannot be greather than 59'],
-      }
+      },
     },
-  }, */
+  },
   isOpen: {
     type: Boolean,
     default: false,
