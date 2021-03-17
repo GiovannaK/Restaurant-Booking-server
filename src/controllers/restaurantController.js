@@ -5,50 +5,6 @@ exports.store = async (req, res) => {
     const newRestaurant = await Restaurant.create({
       ...req.body,
       user: req.userId,
-      openingHours: {
-        monday: {
-          startHours: req.body.monday.startHours,
-          endHours: req.body.monday.endHours,
-          startMinutes: req.body.monday.startMinutes,
-          endMinutes: req.body.monday.endMinutes,
-        },
-        tuesday: {
-          startHours: req.body.tuesday.startHours,
-          endHours: req.body.tuesday.endHours,
-          startMinutes: req.body.tuesday.startMinutes,
-          endMinutes: req.body.tuesday.endMinutes,
-        },
-        wednesday: {
-          startHours: req.body.wednesday.startHours,
-          endHours: req.body.wednesday.endHours,
-          startMinutes: req.body.wednesday.startMinutes,
-          endMinutes: req.body.wednesday.endMinutes,
-        },
-        thursday: {
-          startHours: req.body.thursday.startHours,
-          endHours: req.body.thursday.endHours,
-          startMinutes: req.body.thursday.startMinutes,
-          endMinutes: req.body.thursday.endMinutes,
-        },
-        friday: {
-          startHours: req.body.friday.startHours,
-          endHours: req.body.friday.endHours,
-          startMinutes: req.body.friday.startMinutes,
-          endMinutes: req.body.friday.endMinutes,
-        },
-        saturday: {
-          startHours: req.body.saturday.startHours,
-          endHours: req.body.saturday.endHours,
-          startMinutes: req.body.saturday.startMinutes,
-          endMinutes: req.body.saturday.endMinutes,
-        },
-        sunday: {
-          startHours: req.body.sunday.startHours,
-          endHours: req.body.sunday.endHours,
-          startMinutes: req.body.sunday.startMinutes,
-          endMinutes: req.body.sunday.endMinutes,
-        },
-      },
     });
     return res.status(200).json({
       success: true,
@@ -57,11 +13,95 @@ exports.store = async (req, res) => {
       newRestaurant,
     });
   } catch (error) {
-    console.log(error);
     return res.status(400).json({
       success: false,
       message: 'Cannot create restaurant',
       status: 400,
+    });
+  }
+};
+
+exports.index = async (req, res) => {
+  try {
+    console.log(req.userId);
+    const restaurants = await Restaurant.find({
+      user: req.userId,
+    });
+
+    if (!restaurants) {
+      return res.status(400).json({
+        success: false,
+        message: 'No restaurant available',
+        status: 400,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      restaurants,
+      status: 200,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Cannot show restaurants',
+      status: 500,
+    });
+  }
+};
+
+exports.update = async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findById(req.params.id);
+
+    if (!restaurant) {
+      return res.status(400).json({
+        success: false,
+        message: 'Restaurant not exists',
+        status: 400,
+      });
+    }
+    const updatedRestaurant = await Restaurant.findOneAndUpdate({ _id: req.params.id },
+      req.body,
+      {
+        new: true,
+        runValidators: true,
+      });
+
+    return res.status(200).json({
+      success: true,
+      updatedRestaurant,
+      status: 200,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Cannot update Restaurant',
+      status: 500,
+    });
+  }
+};
+
+exports.deleteRestaurant = async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findById(req.params.id);
+
+    if (!restaurant) {
+      return res.status(400).json({
+        success: false,
+        message: 'Restaurant does not exists',
+        status: 400,
+      });
+    }
+
+    await restaurant.remove();
+
+    return res.status(200).json(null);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Cannot delete restaurant',
+      status: 500,
     });
   }
 };
