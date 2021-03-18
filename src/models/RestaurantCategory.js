@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const RestaurantCategorySchema = new mongoose.Schema({
   name: {
@@ -13,4 +13,4 @@ const RestaurantCategorySchema = new mongoose.Schema({
   timestamps: true,
 });
 
-export default mongoose.model('RestaurantCategory', RestaurantCategorySchema);
+module.exports = mongoose.model('RestaurantCategory', RestaurantCategorySchema);

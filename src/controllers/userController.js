@@ -2,7 +2,7 @@ const User = require('../models/User');
 
 exports.show = async (req, res) => {
   try {
-    const user = await User.findById({ _id: req.params.userId });
+    const user = await User.findById({ _id: req.userId });
 
     return res.status(200).json({
       success: true,

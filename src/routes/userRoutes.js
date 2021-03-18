@@ -5,7 +5,7 @@ const loginRequired = require('../middlewares/loginRequired');
 
 const router = express.Router();
 
-router.get('/profile/:userId', loginRequired, show);
-router.put('/profile/', loginRequired, update);
+router.get('/profile', loginRequired, show);
+router.put('/profile', loginRequired, update);
 
 module.exports = router;
