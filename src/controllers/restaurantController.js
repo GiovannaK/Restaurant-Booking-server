@@ -52,7 +52,6 @@ exports.index = async (req, res) => {
 exports.show = async (req, res) => {
   try {
     const restaurant = await Restaurant.findById(req.params.id);
-
     if (!restaurant) {
       return res.status(400).json({
         success: false,
@@ -67,11 +66,10 @@ exports.show = async (req, res) => {
       status: 200,
     });
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({
+    return res.status(400).json({
       success: false,
       message: 'Cannot show restaurant',
-      status: 500,
+      status: 400,
     });
   }
 };
