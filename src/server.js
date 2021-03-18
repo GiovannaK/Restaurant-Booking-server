@@ -10,6 +10,7 @@ const userRoutes = require('./routes/userRoutes');
 const imagesRouter = require('./routes/imagesRoutes');
 const restaurantRoutes = require('./routes/restaurantRoutes');
 const menuRoutes = require('./routes/menuRoutes');
+const restaurantCategoriesRoutes = require('./routes/restaurantCategoriesRoutes');
 const adminBroOptions = require('./modules/adminBro');
 const { loginAdmin } = require('./controllers/sessionController');
 
@@ -32,6 +33,7 @@ app.use('/user', userRoutes);
 app.use('/restaurant', restaurantRoutes);
 app.use('/images', imagesRouter);
 app.use('/menu', menuRoutes);
+app.use('/restaurant_categories', restaurantCategoriesRoutes);
 app.use('/files', express.static(path.resolve(__dirname, '..', 'temp', 'uploads')));
 
 const PORT = process.env.PORT || 5000;
