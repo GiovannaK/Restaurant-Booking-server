@@ -7,8 +7,9 @@ const adminBroExpress = require('@admin-bro/express');
 const connectDB = require('./config/database');
 const sessionRoutes = require('./routes/sessionRoutes');
 const userRoutes = require('./routes/userRoutes');
-const imagesRouter = require('./routes/imagesRouter');
+const imagesRouter = require('./routes/imagesRoutes');
 const restaurantRoutes = require('./routes/restaurantRoutes');
+const menuRoutes = require('./routes/menuRoutes');
 const adminBroOptions = require('./modules/adminBro');
 const { loginAdmin } = require('./controllers/sessionController');
 
@@ -19,7 +20,7 @@ connectDB();
 const router = adminBroExpress.buildAuthenticatedRouter(adminBroOptions,
   {
     authenticate: loginAdmin,
-    cookiePassword: 'e4aa5940c9b674e6d4232cb3f09704451d08b15d2bd0d0d1c2d2a8291b3a01a7d62d0e661479d588ce7c9b8495e5c9c987a9279971a02194d3d5c5d4bb983879',
+    cookiePassword: `${process.env.COOKIE_PASSWORD}`,
   });
 app.use(adminBroOptions.options.rootPath, router);
 
@@ -30,6 +31,7 @@ app.use('/session', sessionRoutes);
 app.use('/user', userRoutes);
 app.use('/restaurant', restaurantRoutes);
 app.use('/images', imagesRouter);
+app.use('/menu', menuRoutes);
 app.use('/files', express.static(path.resolve(__dirname, '..', 'temp', 'uploads')));
 
 const PORT = process.env.PORT || 5000;

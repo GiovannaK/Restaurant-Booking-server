@@ -1,6 +1,5 @@
 /* eslint-disable consistent-return */
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const sendEmail = require('../modules/mailer.js');
 
@@ -394,7 +393,7 @@ exports.loginAdmin = async (email, password) => {
     const user = await User.findOne({ email, isAdmin: true }).select('+password');
 
     if (user) {
-      const isPasswordMatch = await bcrypt.compare(password, user.password);
+      const isPasswordMatch = await user.passwordMatch(password);
 
       if (isPasswordMatch) {
         return user;

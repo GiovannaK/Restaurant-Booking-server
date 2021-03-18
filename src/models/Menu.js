@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { isInt } = require('validator');
 
 const MenuSchema = new mongoose.Schema({
   name: {
@@ -12,8 +13,24 @@ const MenuSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'price is required'],
     min: [0, 'Price cannot be negative'],
+    validate: {
+      validator(price) {
+        return isInt(String(price));
+      },
+      message: 'Price must be integer',
+    },
   },
-
+  priceCents: {
+    type: Number,
+    required: [true, 'cent is required'],
+    min: [0, 'cent cannot be negative'],
+    validate: {
+      validator(priceCents) {
+        return isInt(String(priceCents));
+      },
+      message: 'Cent must be integer',
+    },
+  },
   description: {
     type: String,
   },
@@ -26,6 +43,10 @@ const MenuSchema = new mongoose.Schema({
   menuCategory: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'MenuCategory',
+  },
+  restaurant: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Restaurant',
   },
 
 },

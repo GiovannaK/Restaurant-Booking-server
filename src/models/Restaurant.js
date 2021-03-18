@@ -217,12 +217,13 @@ const RestaurantSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+    required: true,
   },
   restaurantCategory: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'RestaurantCategory',
+    required: true,
   },
-
 },
 {
   timestamps: true,

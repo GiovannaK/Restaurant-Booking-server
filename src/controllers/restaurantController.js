@@ -23,7 +23,6 @@ exports.store = async (req, res) => {
 
 exports.index = async (req, res) => {
   try {
-    console.log(req.userId);
     const restaurants = await Restaurant.find({
       user: req.userId,
     });
