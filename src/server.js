@@ -11,7 +11,9 @@ const imagesRouter = require('./routes/imagesRoutes');
 const restaurantRoutes = require('./routes/restaurantRoutes');
 const menuRoutes = require('./routes/menuRoutes');
 const restaurantCategoriesRoutes = require('./routes/restaurantCategoriesRoutes');
-const menuCategoryController = require('./routes/menuCategoriesRoutes');
+const menuCategoryRoutes = require('./routes/menuCategoriesRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
+const restaurantBookingsRoutes = require('./routes/restaurantBookingsRoutes');
 const adminBroOptions = require('./modules/adminBro');
 const { loginAdmin } = require('./controllers/sessionController');
 
@@ -35,7 +37,9 @@ app.use('/restaurant', restaurantRoutes);
 app.use('/images', imagesRouter);
 app.use('/menu', menuRoutes);
 app.use('/restaurant_categories', restaurantCategoriesRoutes);
-app.use('/menu_categories', menuCategoryController);
+app.use('/menu_categories', menuCategoryRoutes);
+app.use('/booking', bookingRoutes);
+app.use('/restaurant_bookings', restaurantBookingsRoutes);
 app.use('/files', express.static(path.resolve(__dirname, '..', 'temp', 'uploads')));
 
 const PORT = process.env.PORT || 5000;

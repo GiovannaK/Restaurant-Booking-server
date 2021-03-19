@@ -26,8 +26,6 @@ exports.upload = async (req, res) => {
       image,
     });
   } catch (error) {
-    console.log(error);
-
     return res.status(500).json({
       success: false,
       message: 'Upload fail',
@@ -54,7 +52,6 @@ exports.index = async (req, res) => {
       status: 200,
     });
   } catch (error) {
-    console.log(error);
     return res.status(400).json({
       success: false,
       message: 'Cannot show images',

@@ -25,9 +25,7 @@ const BookingSchema = new mongoose.Schema({
     required: true,
   },
   approved: {
-    type: String,
-    default: 'pending',
-    enum: ['pending', 'approved', 'not approved'],
+    type: Boolean,
   },
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -39,7 +37,7 @@ const BookingSchema = new mongoose.Schema({
     ref: 'Restaurant',
     required: true,
   },
-  speciaDate: {
+  specialDate: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'SpecialDate',
   },
