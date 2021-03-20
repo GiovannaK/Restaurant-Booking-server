@@ -16,6 +16,7 @@ const menuCategoryRoutes = require('./routes/menuCategoriesRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const restaurantBookingsRoutes = require('./routes/restaurantBookingsRoutes');
 const specialDateRoutes = require('./routes/specialDateRoutes');
+const userBookingRoutes = require('./routes/userBookingRoutes');
 const adminBroOptions = require('./modules/adminBro');
 const { loginAdmin } = require('./controllers/sessionController');
 
@@ -37,6 +38,7 @@ app.use(adminBroOptions.options.rootPath, router);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use('/user_bookings', userBookingRoutes);
 app.use('/special_dates', specialDateRoutes);
 app.use('/', homeRoutes);
 app.use('/session', sessionRoutes);

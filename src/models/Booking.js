@@ -41,6 +41,10 @@ const BookingSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'SpecialDate',
   },
+  review: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Review',
+  },
 },
 {
   timestamps: true,
