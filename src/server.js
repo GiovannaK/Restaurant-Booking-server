@@ -5,6 +5,7 @@ const path = require('path');
 const dotenv = require('dotenv').config();
 const adminBroExpress = require('@admin-bro/express');
 const connectDB = require('./config/database');
+const homeRoutes = require('./routes/homeRoutes');
 const sessionRoutes = require('./routes/sessionRoutes');
 const userRoutes = require('./routes/userRoutes');
 const imagesRouter = require('./routes/imagesRoutes');
@@ -14,12 +15,17 @@ const restaurantCategoriesRoutes = require('./routes/restaurantCategoriesRoutes'
 const menuCategoryRoutes = require('./routes/menuCategoriesRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const restaurantBookingsRoutes = require('./routes/restaurantBookingsRoutes');
+const specialDateRoutes = require('./routes/specialDateRoutes');
 const adminBroOptions = require('./modules/adminBro');
 const { loginAdmin } = require('./controllers/sessionController');
 
 const app = express();
 
+// connect database
+
 connectDB();
+
+// adminBro
 
 const router = adminBroExpress.buildAuthenticatedRouter(adminBroOptions,
   {
@@ -31,6 +37,8 @@ app.use(adminBroOptions.options.rootPath, router);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use('/special_dates', specialDateRoutes);
+app.use('/', homeRoutes);
 app.use('/session', sessionRoutes);
 app.use('/user', userRoutes);
 app.use('/restaurant', restaurantRoutes);
