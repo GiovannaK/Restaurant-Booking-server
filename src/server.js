@@ -17,6 +17,7 @@ const bookingRoutes = require('./routes/bookingRoutes');
 const restaurantBookingsRoutes = require('./routes/restaurantBookingsRoutes');
 const specialDateRoutes = require('./routes/specialDateRoutes');
 const userBookingRoutes = require('./routes/userBookingRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 const adminBroOptions = require('./modules/adminBro');
 const { loginAdmin } = require('./controllers/sessionController');
 
@@ -50,6 +51,7 @@ app.use('/restaurant_categories', restaurantCategoriesRoutes);
 app.use('/menu_categories', menuCategoryRoutes);
 app.use('/booking', bookingRoutes);
 app.use('/restaurant_bookings', restaurantBookingsRoutes);
+app.use('/review', reviewRoutes);
 app.use('/files', express.static(path.resolve(__dirname, '..', 'temp', 'uploads')));
 
 const PORT = process.env.PORT || 5000;
