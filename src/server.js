@@ -41,7 +41,6 @@ app.use(express.json());
 
 app.use('/user_bookings', userBookingRoutes);
 app.use('/special_dates', specialDateRoutes);
-app.use('/', homeRoutes);
 app.use('/session', sessionRoutes);
 app.use('/user', userRoutes);
 app.use('/restaurant', restaurantRoutes);
@@ -52,6 +51,7 @@ app.use('/menu_categories', menuCategoryRoutes);
 app.use('/booking', bookingRoutes);
 app.use('/restaurant_bookings', restaurantBookingsRoutes);
 app.use('/review', reviewRoutes);
+app.use('/', homeRoutes);
 app.use('/files', express.static(path.resolve(__dirname, '..', 'temp', 'uploads')));
 
 const PORT = process.env.PORT || 5000;
