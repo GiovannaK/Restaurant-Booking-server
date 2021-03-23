@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 const Images = require('../models/Images');
+const Restaurant = require('../models/Restaurant');
 
 exports.upload = async (req, res) => {
   try {
@@ -18,6 +19,9 @@ exports.upload = async (req, res) => {
     });
 
     await image.populate('restaurant').execPopulate();
+
+    const restaurant = await Restaurant.findByIdAndUpdate({ _id: req.params.restaurantId },
+      { $push: { images: image.id } });
 
     return res.status(200).json({
       success: true,

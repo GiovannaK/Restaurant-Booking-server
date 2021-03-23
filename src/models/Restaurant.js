@@ -1,7 +1,5 @@
 /* eslint-disable no-return-await */
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const crypto = require('crypto');
 const { cnpj } = require('cpf-cnpj-validator');
 const { isMobilePhone } = require('validator');
 
@@ -252,41 +250,15 @@ const RestaurantSchema = new mongoose.Schema({
     ref: 'RestaurantCategory',
     required: true,
   },
+  images: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Images',
+    },
+  ],
 },
 {
   timestamps: true,
 });
-
-RestaurantSchema.pre('save', async function (next) {
-  if (this.password && this.isModified('password')) {
-    const hash = await bcrypt.hash(this.password, 10);
-    this.password = hash;
-    next();
-  }
-});
-
-RestaurantSchema.methods.passwordMatch = async function (password) {
-  return await bcrypt.compare(password, this.password);
-};
-
-RestaurantSchema.methods.generateResetToken = function () {
-  const resetToken = crypto.randomBytes(20).toString('hex');
-
-  this.passwordResetToken = resetToken;
-
-  this.passwordResetExpires = Date.now() + 10 * (60 * 1000);
-
-  return resetToken;
-};
-
-RestaurantSchema.methods.generateConfirmationToken = function () {
-  const confirmationToken = crypto.randomBytes(20).toString('hex');
-
-  this.emailConfirmationToken = confirmationToken;
-
-  this.emailConfirmationExpires = Date.now() + 10 * (60 * 1000);
-
-  return confirmationToken;
-};
 
 module.exports = mongoose.model('Restaurant', RestaurantSchema);
