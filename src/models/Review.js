@@ -13,10 +13,6 @@ const ReviewSchema = new mongoose.Schema({
     ref: 'Booking',
     required: true,
   },
-  restaurant: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant',
-  },
 },
 {
   timestamps: true,

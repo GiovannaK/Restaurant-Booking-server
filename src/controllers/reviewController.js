@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+const Booking = require('../models/Booking');
 const Review = require('../models/Review');
 
 exports.store = async (req, res) => {
@@ -15,8 +17,10 @@ exports.store = async (req, res) => {
     const review = await Review.create({
       ...req.body,
       booking: req.params.bookingId,
-      restaurant: req.params.restaurantId,
     });
+
+    const booking = await Booking.findByIdAndUpdate({ _id: req.params.bookingId },
+      { review: review.id });
 
     if (!review) {
       return res.status(400).json({

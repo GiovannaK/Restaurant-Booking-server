@@ -4,7 +4,7 @@ exports.index = async (req, res) => {
   try {
     const userBookings = await Booking.find({
       user: req.userId,
-    }).populate('user');
+    }).populate('user').populate('review');
 
     if (!userBookings) {
       return res.status(200).json(null);
@@ -26,7 +26,7 @@ exports.index = async (req, res) => {
 
 exports.show = async (req, res) => {
   try {
-    const userBooking = await Booking.findById(req.params.id).populate('user');
+    const userBooking = await Booking.findById(req.params.id).populate('review');
 
     if (!userBooking) {
       return res.status(400).json({

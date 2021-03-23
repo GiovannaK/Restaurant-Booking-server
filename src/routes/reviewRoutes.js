@@ -5,6 +5,6 @@ const loginRequired = require('../middlewares/loginRequired');
 
 const router = express.Router();
 
-router.post('/:restaurantId/:bookingId', loginRequired, store);
+router.post('/:bookingId', loginRequired, store);
 
 module.exports = router;
