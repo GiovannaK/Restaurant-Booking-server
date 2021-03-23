@@ -1,4 +1,5 @@
 const Booking = require('../models/Booking');
+const sendEmail = require('../modules/mailer.js');
 
 exports.store = async (req, res) => {
   try {
@@ -18,11 +19,38 @@ exports.store = async (req, res) => {
       });
     }
 
-    return res.status(200).json({
-      success: true,
-      newBooking,
-      status: 200,
-    });
+    const message = `
+      <h1>Sua solicitação de reserva foi enviada para ${newBooking.restaurant.companyName} </h1>
+      <h4> Você reberá informações por e-mail caso sua reserva seja aprovada ou rejeitada.
+        Aqui estão as informações.
+      </h4>
+      <h5>
+        Nome do restaurante: ${newBooking.restaurant.companyName}
+        Reserva para o dia: ${newBooking.date.toLocaleDateString('pt-br')}
+        <hr>
+        Mesa para ${newBooking.table} pessoas
+      </h5>
+    `;
+
+    try {
+      await sendEmail({
+        to: newBooking.user.email,
+        subject: 'GetYourTable - Solicitação de reserva',
+        text: message,
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: 'Email sent',
+        newBooking,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: 'Email could be not sent',
+        status: 500,
+      });
+    }
   } catch (error) {
     return res.status(500).json({
       success: false,
