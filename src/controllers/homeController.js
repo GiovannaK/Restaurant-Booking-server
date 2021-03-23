@@ -44,6 +44,37 @@ exports.index = async (req, res) => {
   }
 };
 
+exports.search = async (req, res) => {
+  try {
+    const { q } = req.query;
+    const resultSearch = await Restaurant.find({
+      $or: [
+        { companyName: { $regex: new RegExp(q, 'i') } },
+      ],
+    });
+
+    if (!resultSearch) {
+      return res.status(400).json({
+        success: false,
+        message: 'Restaurant not found',
+        status: 400,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      resultSearch,
+      status: 200,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: 'Cannot search',
+      status: 400,
+    });
+  }
+};
+
 exports.show = async (req, res) => {
   try {
     const restaurant = await Restaurant.findById(req.params.id).populate('images');
