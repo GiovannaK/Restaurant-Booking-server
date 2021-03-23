@@ -66,7 +66,9 @@ exports.index = async (req, res) => {
 
 exports.deleteImage = async (req, res) => {
   try {
-    const image = await Images.findById(req.params.id);
+    const image = await Images.findById(req.params.id).populate('restaurant');
+    const restaurant = await Restaurant.findByIdAndUpdate({ _id: image.restaurant.id },
+      { $pull: { images: req.params.id } });
 
     if (!image) {
       return res.status(400).json({
@@ -76,10 +78,19 @@ exports.deleteImage = async (req, res) => {
       });
     }
 
+    if (!restaurant) {
+      return res.status(400).json({
+        success: false,
+        message: 'Reference does not exists',
+        status: 400,
+      });
+    }
+
     await image.remove();
 
     return res.status(200).json(null);
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       message: 'Cannot delete image',
