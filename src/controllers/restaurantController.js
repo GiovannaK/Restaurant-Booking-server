@@ -2,7 +2,15 @@ const Restaurant = require('../models/Restaurant');
 
 exports.store = async (req, res) => {
   try {
+    const { latitude, longitude } = req.body;
+
+    const location = {
+      type: 'Point',
+      coordinates: [longitude, latitude],
+    };
+
     const newRestaurant = await Restaurant.create({
+      location,
       ...req.body,
       user: req.userId,
     });
@@ -85,13 +93,35 @@ exports.update = async (req, res) => {
         status: 400,
       });
     }
-    const updatedRestaurant = await Restaurant.findOneAndUpdate({ _id: req.params.id },
+
+    const { latitude, longitude } = req.body;
+
+    if (latitude && longitude) {
+      const location = {
+        type: 'Point',
+        coordinates: [longitude, latitude],
+      };
+
+      const updatedRestaurant = await Restaurant.findByIdAndUpdate({ _id: req.params.id },
+        { ...req.body, location },
+        {
+          new: true,
+          runValidators: true,
+        });
+
+      return res.status(200).json({
+        success: true,
+        updatedRestaurant,
+        status: 200,
+      });
+    }
+
+    const updatedRestaurant = await Restaurant.findByIdAndUpdate({ _id: req.params.id },
       req.body,
       {
         new: true,
         runValidators: true,
       });
-
     return res.status(200).json({
       success: true,
       updatedRestaurant,

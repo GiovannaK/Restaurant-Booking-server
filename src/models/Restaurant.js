@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const { cnpj } = require('cpf-cnpj-validator');
 const { isMobilePhone } = require('validator');
+const PointSchema = require('./utils/PointSchema');
 
 const RestaurantSchema = new mongoose.Schema({
   companyName: {
@@ -256,6 +257,10 @@ const RestaurantSchema = new mongoose.Schema({
       ref: 'Images',
     },
   ],
+  location: {
+    type: PointSchema,
+    index: '2dsphere',
+  },
 },
 {
   timestamps: true,
