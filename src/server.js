@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-unused-vars */
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv').config();
 const adminBroExpress = require('@admin-bro/express');
@@ -23,12 +24,6 @@ const { loginAdmin } = require('./controllers/sessionController');
 
 const app = express();
 
-// connect database
-
-connectDB();
-
-// adminBro
-
 const router = adminBroExpress.buildAuthenticatedRouter(adminBroOptions,
   {
     authenticate: loginAdmin,
@@ -38,6 +33,15 @@ app.use(adminBroOptions.options.rootPath, router);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+const corsOptions = {
+  origin: `${process.env.BASE_URL}`,
+  methods: 'GET, PUT, DELETE, POST',
+};
+
+app.use(cors(corsOptions));
+
+connectDB();
 
 app.use('/user_bookings', userBookingRoutes);
 app.use('/special_dates', specialDateRoutes);
