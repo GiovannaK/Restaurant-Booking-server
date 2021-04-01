@@ -9,7 +9,8 @@ exports.index = async (req, res) => {
     const total = await Restaurant.countDocuments();
     const pages = Math.ceil(total / pageSize);
 
-    const restaurants = await Restaurant.find().skip(skip).limit(pageSize).populate('images');
+    const restaurants = await Restaurant.find().skip(skip).limit(pageSize).populate('images')
+      .populate('restaurantCategory');
 
     if (!restaurants) {
       return res.status(400).json({
