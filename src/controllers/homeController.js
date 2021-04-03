@@ -106,7 +106,7 @@ exports.showReview = async (req, res) => {
   try {
     const restaurantBookingReviews = await Booking.find({
       restaurant: req.params.restaurantId,
-    }).populate('review');
+    }).populate('review').populate('user');
 
     if (!restaurantBookingReviews) {
       return res.status(200).json(null);
