@@ -30,23 +30,10 @@ exports.update = async (req, res) => {
       });
     }
 
-    const passwordAlreadyExists = await user.passwordMatch(req.body.password);
-
-    if (passwordAlreadyExists) {
-      return res.status(400).json({
-        success: false,
-        message: 'Password already exists',
-        status: 400,
-      });
-    }
-
     const newData = await User.findOneAndUpdate({ _id: req.userId }, req.body, {
       new: true,
       runValidators: true,
     });
-
-    user.password = req.body.password;
-    await user.save();
 
     const {
       id, firstName, lastName, email, phone,
@@ -61,6 +48,7 @@ exports.update = async (req, res) => {
       status: 200,
     });
   } catch (error) {
+    console.log(error);
     return res.status(400).json({
       success: false,
       message: 'Cannot update user information',

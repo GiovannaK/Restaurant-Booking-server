@@ -5,7 +5,9 @@ exports.index = async (req, res) => {
     const userBookings = await Booking.find({
       user: req.userId,
     }).populate('review').populate('specialDate')
-      .populate('restaurant');
+      .populate('restaurant')
+      .sort({ createdAt: -1 })
+      .exec();
 
     if (!userBookings) {
       return res.status(200).json(null);
