@@ -26,7 +26,7 @@ exports.register = async (req, res) => {
 
     await user.save();
 
-    const confirmationUrl = `${process.env.BASE_URL}/session/account_confirmation/${accountConfirmationToken}`;
+    const confirmationUrl = `${process.env.BASE_URL}/account_confirmation/${accountConfirmationToken}`;
 
     const message = `
       <h1>Ative sua conta</h1>
@@ -96,7 +96,7 @@ exports.registerPartner = async (req, res) => {
 
     await user.save();
 
-    const confirmationUrl = `${process.env.BASE_URL}/session/account_confirmation/${accountConfirmationToken}`;
+    const confirmationUrl = `${process.env.BASE_URL}/account_confirmation/${accountConfirmationToken}`;
 
     const message = `
       <h1>Ative sua conta</h1>
@@ -167,7 +167,7 @@ exports.registerAdmin = async (req, res) => {
 
     await user.save();
 
-    const confirmationUrl = `${process.env.BASE_URL}/session/account_confirmation/${accountConfirmationToken}`;
+    const confirmationUrl = `${process.env.BASE_URL}/account_confirmation/${accountConfirmationToken}`;
 
     const message = `
       <h1>Ative sua conta</h1>
@@ -248,6 +248,7 @@ exports.accountConfirmation = async (req, res) => {
       status: 200,
     });
   } catch (error) {
+    console.log(error);
     return res.status(400).json({
       success: false,
       message: 'Cannot verify account',
@@ -424,7 +425,7 @@ exports.forgotPassword = async (req, res) => {
 
     await user.save();
 
-    const resetPaswordUrl = `${process.env.BASE_URL}/session/reset_password/${resetPasswordToken}`;
+    const resetPaswordUrl = `${process.env.BASE_URL}/reset_password/${resetPasswordToken}`;
 
     const message = `
       <h1>Altere sua senha</h1>

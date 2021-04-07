@@ -33,7 +33,7 @@ exports.index = async (req, res) => {
   try {
     const restaurants = await Restaurant.find({
       user: req.userId,
-    });
+    }).populate('images');
 
     if (!restaurants) {
       return res.status(400).json({
