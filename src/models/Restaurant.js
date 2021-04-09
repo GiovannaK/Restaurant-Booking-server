@@ -1,7 +1,6 @@
 /* eslint-disable no-return-await */
 const mongoose = require('mongoose');
 const { cnpj } = require('cpf-cnpj-validator');
-const { isMobilePhone } = require('validator');
 const PointSchema = require('./utils/PointSchema');
 
 const RestaurantSchema = new mongoose.Schema({
@@ -17,23 +16,9 @@ const RestaurantSchema = new mongoose.Schema({
     validate: [cnpj.isValid, 'Invalid cnpj'],
   },
 
-  mobilePhone: {
-    type: Number,
-    validate: {
-      validator(phoneNumber) {
-        return isMobilePhone(String(phoneNumber), 'pt-BR');
-      },
-      message: 'Invalid mobile phone number',
-    },
-    trim: true,
-    required: [true, 'mobile phone number is required'],
-    unique: [true, 'mobile phone number must be unique'],
-  },
-
   phone: {
-    type: String,
-    minlength: [10, 'Invalid phone number'],
-    maxlength: [10, 'Invalid phone number'],
+    type: Number,
+    min: [10, 'Invalid phone number'],
     required: [true, 'Phone is required'],
     unique: [true, 'phone number must be unique'],
   },
@@ -54,7 +39,7 @@ const RestaurantSchema = new mongoose.Schema({
     required: [true, 'Capacity is required'],
   },
 
-  monday: {
+  businessDay: {
     startHours: {
       type: Number,
       min: [0, 'start hour cannot be less than 0'],
@@ -80,7 +65,7 @@ const RestaurantSchema = new mongoose.Schema({
       required: true,
     },
   },
-  tuesday: {
+  weekend: {
     startHours: {
       type: Number,
       min: [0, 'start hour cannot be less than 0'],
@@ -106,137 +91,6 @@ const RestaurantSchema = new mongoose.Schema({
       required: true,
     },
   },
-  wednesday: {
-    startHours: {
-      type: Number,
-      min: [0, 'start hour cannot be less than 0'],
-      max: [23, 'start hour cannot be greather than 23'],
-      required: true,
-    },
-    endHours: {
-      type: Number,
-      min: [0, 'end hour cannot be less than 0'],
-      max: [23, 'end hour cannot be greather than 23'],
-      required: true,
-    },
-    startMinutes: {
-      type: Number,
-      min: [0, 'start minute cannot be less than 0'],
-      max: [59, 'start minute cannot be greather than 59'],
-      required: true,
-    },
-    endMinutes: {
-      type: Number,
-      min: [0, 'end minute cannot be less than 0'],
-      max: [59, 'end minute cannot be greather than 59'],
-      required: true,
-    },
-  },
-  thursday: {
-    startHours: {
-      type: Number,
-      min: [0, 'start hour cannot be less than 0'],
-      max: [23, 'start hour cannot be greather than 23'],
-      required: true,
-    },
-    endHours: {
-      type: Number,
-      min: [0, 'end hour cannot be less than 0'],
-      max: [23, 'end hour cannot be greather than 23'],
-      required: true,
-    },
-    startMinutes: {
-      type: Number,
-      min: [0, 'start minute cannot be less than 0'],
-      max: [59, 'start minute cannot be greather than 59'],
-      required: true,
-    },
-    endMinutes: {
-      type: Number,
-      min: [0, 'end minute cannot be less than 0'],
-      max: [59, 'end minute cannot be greather than 59'],
-      required: true,
-    },
-  },
-  friday: {
-    startHours: {
-      type: Number,
-      min: [0, 'start hour cannot be less than 0'],
-      max: [23, 'start hour cannot be greather than 23'],
-      required: true,
-    },
-    endHours: {
-      type: Number,
-      min: [0, 'end hour cannot be less than 0'],
-      max: [23, 'end hour cannot be greather than 23'],
-      required: true,
-    },
-    startMinutes: {
-      type: Number,
-      min: [0, 'start minute cannot be less than 0'],
-      max: [59, 'start minute cannot be greather than 59'],
-      required: true,
-    },
-    endMinutes: {
-      type: Number,
-      min: [0, 'end minute cannot be less than 0'],
-      max: [59, 'end minute cannot be greather than 59'],
-      required: true,
-    },
-  },
-  saturday: {
-    startHours: {
-      type: Number,
-      min: [0, 'start hour cannot be less than 0'],
-      max: [23, 'start hour cannot be greather than 23'],
-      required: true,
-    },
-    endHours: {
-      type: Number,
-      min: [0, 'end hour cannot be less than 0'],
-      max: [23, 'end hour cannot be greather than 23'],
-      required: true,
-    },
-    startMinutes: {
-      type: Number,
-      min: [0, 'start minute cannot be less than 0'],
-      max: [59, 'start minute cannot be greather than 59'],
-      required: true,
-    },
-    endMinutes: {
-      type: Number,
-      min: [0, 'end minute cannot be less than 0'],
-      max: [59, 'end minute cannot be greather than 59'],
-      required: true,
-    },
-  },
-  sunday: {
-    startHours: {
-      type: Number,
-      min: [0, 'start hour cannot be less than 0'],
-      max: [23, 'start hour cannot be greather than 23'],
-      required: true,
-    },
-    endHours: {
-      type: Number,
-      min: [0, 'end hour cannot be less than 0'],
-      max: [23, 'end hour cannot be greather than 23'],
-      required: true,
-    },
-    startMinutes: {
-      type: Number,
-      min: [0, 'start minute cannot be less than 0'],
-      max: [59, 'start minute cannot be greather than 59'],
-      required: true,
-    },
-    endMinutes: {
-      type: Number,
-      min: [0, 'end minute cannot be less than 0'],
-      max: [59, 'end minute cannot be greather than 59'],
-      required: true,
-    },
-  },
-
   isOpen: {
     type: Boolean,
     default: false,
