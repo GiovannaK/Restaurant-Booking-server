@@ -31,7 +31,7 @@ const router = adminBroExpress.buildAuthenticatedRouter(adminBroOptions,
   });
 app.use(adminBroOptions.options.rootPath, router);
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded());
 app.use(express.json());
 
 const corsOptions = {

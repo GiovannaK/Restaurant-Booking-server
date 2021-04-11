@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 const multer = require('multer');
 const multerConfig = require('../config/multer');

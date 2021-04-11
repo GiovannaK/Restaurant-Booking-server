@@ -1,3 +1,4 @@
+/* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-return-await */
 const mongoose = require('mongoose');
 const { cnpj } = require('cpf-cnpj-validator');
@@ -38,58 +39,21 @@ const RestaurantSchema = new mongoose.Schema({
     min: [1, 'Your restaurant must have capacity for at least 1 person'],
     required: [true, 'Capacity is required'],
   },
-
-  businessDay: {
-    startHours: {
-      type: Number,
-      min: [0, 'start hour cannot be less than 0'],
-      max: [23, 'start hour cannot be greather than 23'],
-      required: true,
-    },
-    endHours: {
-      type: Number,
-      min: [0, 'end hour cannot be less than 0'],
-      max: [23, 'end hour cannot be greather than 23'],
-      required: true,
-    },
-    startMinutes: {
-      type: Number,
-      min: [0, 'start minute cannot be less than 0'],
-      max: [59, 'start minute cannot be greather than 59'],
-      required: true,
-    },
-    endMinutes: {
-      type: Number,
-      min: [0, 'end minute cannot be less than 0'],
-      max: [59, 'end minute cannot be greather than 59'],
-      required: true,
-    },
+  businessDayStartHours: {
+    type: String,
+    required: [true, 'A business Day start hour is required'],
   },
-  weekend: {
-    startHours: {
-      type: Number,
-      min: [0, 'start hour cannot be less than 0'],
-      max: [23, 'start hour cannot be greather than 23'],
-      required: true,
-    },
-    endHours: {
-      type: Number,
-      min: [0, 'end hour cannot be less than 0'],
-      max: [23, 'end hour cannot be greather than 23'],
-      required: true,
-    },
-    startMinutes: {
-      type: Number,
-      min: [0, 'start minute cannot be less than 0'],
-      max: [59, 'start minute cannot be greather than 59'],
-      required: true,
-    },
-    endMinutes: {
-      type: Number,
-      min: [0, 'end minute cannot be less than 0'],
-      max: [59, 'end minute cannot be greather than 59'],
-      required: true,
-    },
+  businessDayFinalHours: {
+    type: String,
+    required: [true, 'A business Day final hour is required'],
+  },
+  weekendStartHours: {
+    type: String,
+    required: [true, 'A weekend start hour is required'],
+  },
+  weekendFinalHours: {
+    type: String,
+    required: [true, 'A weekend final hour is required'],
   },
   isOpen: {
     type: Boolean,
