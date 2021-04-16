@@ -1,3 +1,4 @@
+const moment = require('moment');
 const Booking = require('../models/Booking');
 const sendEmail = require('../modules/mailer.js');
 
@@ -26,12 +27,12 @@ exports.store = async (req, res) => {
       </h4>
       <h5>
         Nome do restaurante: ${newBooking.restaurant.companyName}
-        Reserva para o dia: ${newBooking.date.toLocaleDateString('pt-br')}
+        Reserva para o dia: ${moment(newBooking.date).format('DD/MM/YYYY')}
         <hr>
         Mesa para ${newBooking.table} pessoas
       </h5>
     `;
-
+    console.log(newBooking.date);
     try {
       await sendEmail({
         to: newBooking.user.email,
@@ -45,6 +46,7 @@ exports.store = async (req, res) => {
         newBooking,
       });
     } catch (error) {
+      console.log(error);
       return res.status(500).json({
         success: false,
         message: 'Email could be not sent',
@@ -52,6 +54,7 @@ exports.store = async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       message: 'Server error',

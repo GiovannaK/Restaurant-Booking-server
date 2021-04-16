@@ -2,19 +2,11 @@ const mongoose = require('mongoose');
 
 const BookingSchema = new mongoose.Schema({
   hours: {
-    type: Number,
-    min: [0, 'Hour cannot be less than 0'],
-    max: [23, 'Hour cannot be greather than 23'],
-    required: true,
-  },
-  minutes: {
-    type: Number,
-    min: [0, 'Minute cannot be less than 0'],
-    max: [59, 'Minute cannot be greather than 59'],
+    type: String,
     required: true,
   },
   date: {
-    type: Date,
+    type: String,
     required: true,
   },
   extras: {
