@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+const moment = require('moment');
 const Booking = require('../models/Booking');
 const sendEmail = require('../modules/mailer.js');
 
@@ -5,7 +7,8 @@ exports.index = async (req, res) => {
   try {
     const restaurantBooking = await Booking.find({
       restaurant: req.params.restaurantId,
-    }).populate('user');
+    }).populate('user').populate('specialDate').sort({ createdAt: -1 })
+      .exec();
 
     if (!restaurantBooking) {
       return res.status(400).json({
@@ -43,13 +46,19 @@ exports.approval = async (req, res) => {
 
     await booking.save();
 
+    const bookingUserSocket = req.connectedUsers[booking.user._id];
+
+    if (bookingUserSocket) {
+      req.io.to(bookingUserSocket).emit('booking_response', booking);
+    }
+
     const message = `
       <h1>Sua solicitação de reserva em ${booking.restaurant.companyName} </h1>
       <h4> Sua solicitação de reserva foi aprovada aqui estão as informações.
       </h4>
       <h5>
         Nome do restaurante: ${booking.restaurant.companyName}
-        Reserva para o dia: ${booking.date.toLocaleDateString('pt-br')}
+        Reserva para o dia: ${moment(booking.date).format('DD/MM/YYYY')}
         <hr>
         Mesa para ${booking.table} pessoas
       </h5>
@@ -98,13 +107,19 @@ exports.reject = async (req, res) => {
 
     await booking.save();
 
+    const bookingUserSocket = req.connectedUsers[booking.user._id];
+
+    if (bookingUserSocket) {
+      req.io.to(bookingUserSocket).emit('booking_response', booking);
+    }
+
     const message = `
       <h1>Sua solicitação de reserva em ${booking.restaurant.companyName} </h1>
       <h4> Sentimos muito, sua solicitação de reserva foi <strong>rejeitada</strong>.
       </h4>
       <h5>
         Nome do restaurante: ${booking.restaurant.companyName}
-        Reserva para o dia: ${booking.date.toLocaleDateString('pt-br')}
+        Reserva para o dia: ${moment(booking.date).format('DD/MM/YYYY')}
         <hr>
         Mesa para ${booking.table} pessoas
       </h5>

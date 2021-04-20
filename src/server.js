@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const dotenv = require('dotenv').config();
+const socketio = require('socket.io');
+const http = require('http');
 const adminBroExpress = require('@admin-bro/express');
 const connectDB = require('./config/database');
 const homeRoutes = require('./routes/homeRoutes');
@@ -23,6 +25,8 @@ const adminBroOptions = require('./modules/adminBro');
 const { loginAdmin } = require('./controllers/sessionController');
 
 const app = express();
+const server = http.Server(app);
+const io = socketio(server);
 
 const router = adminBroExpress.buildAuthenticatedRouter(adminBroOptions,
   {
@@ -43,6 +47,21 @@ app.use(cors(corsOptions));
 
 connectDB();
 
+const connectedUsers = {};
+
+io.on('connection', (socket) => {
+  const { user } = socket.handshake.query;
+
+  connectedUsers[user] = socket.id;
+});
+
+app.use((req, res, next) => {
+  req.io = io;
+  req.connectedUsers = connectedUsers;
+
+  return next();
+});
+
 app.use('/user_bookings', userBookingRoutes);
 app.use('/special_dates', specialDateRoutes);
 app.use('/session', sessionRoutes);
@@ -60,7 +79,7 @@ app.use('/files', express.static(path.resolve(__dirname, '..', 'temp', 'uploads'
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(
+server.listen(
   PORT,
   console.log(`Server is running on port ${PORT}`),
 );

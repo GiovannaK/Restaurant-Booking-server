@@ -1,5 +1,7 @@
+/* eslint-disable no-underscore-dangle */
 const moment = require('moment');
 const Booking = require('../models/Booking');
+const Restaurant = require('../models/Restaurant');
 const sendEmail = require('../modules/mailer.js');
 
 exports.store = async (req, res) => {
@@ -11,6 +13,7 @@ exports.store = async (req, res) => {
     });
 
     await newBooking.populate('restaurant').populate('user').populate('specialDate').execPopulate();
+    const getRestaurantOwner = await Restaurant.findById(req.params.restaurantId).populate('user');
 
     if (!newBooking) {
       return res.status(400).json({
@@ -18,6 +21,12 @@ exports.store = async (req, res) => {
         message: 'Cannot create booking',
         status: 400,
       });
+    }
+
+    const ownerRestaurantSocket = req.connectedUsers[getRestaurantOwner.user._id];
+
+    if (ownerRestaurantSocket) {
+      req.io.to(ownerRestaurantSocket).emit('booking_request', newBooking);
     }
 
     const message = `
@@ -32,7 +41,6 @@ exports.store = async (req, res) => {
         Mesa para ${newBooking.table} pessoas
       </h5>
     `;
-    console.log(newBooking.date);
     try {
       await sendEmail({
         to: newBooking.user.email,
@@ -44,6 +52,7 @@ exports.store = async (req, res) => {
         success: true,
         message: 'Email sent',
         newBooking,
+        getRestaurantOwner,
       });
     } catch (error) {
       console.log(error);
