@@ -34,6 +34,7 @@ exports.search = async (req, res) => {
     const resultSearch = await Restaurant.find({
       $or: [
         { companyName: { $regex: new RegExp(q, 'i') } },
+        { address: { $regex: new RegExp(q, 'i') } },
       ],
     });
 
