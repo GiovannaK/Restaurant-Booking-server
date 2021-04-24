@@ -26,7 +26,13 @@ const { loginAdmin } = require('./controllers/sessionController');
 
 const app = express();
 const server = http.Server(app);
-const io = socketio(server);
+
+const corsOptions = {
+  origin: `${process.env.BASE_URL}`,
+  methods: 'GET, PUT, DELETE, POST',
+};
+
+const io = socketio(server, corsOptions);
 
 const router = adminBroExpress.buildAuthenticatedRouter(adminBroOptions,
   {
@@ -37,11 +43,6 @@ app.use(adminBroOptions.options.rootPath, router);
 
 app.use(express.urlencoded());
 app.use(express.json());
-
-const corsOptions = {
-  origin: `${process.env.BASE_URL}`,
-  methods: 'GET, PUT, DELETE, POST',
-};
 
 app.use(cors(corsOptions));
 
