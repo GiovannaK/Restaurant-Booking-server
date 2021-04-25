@@ -28,7 +28,7 @@ const app = express();
 const server = http.Server(app);
 
 const corsOptions = {
-  origin: `${process.env.BASE_URL}`,
+  origin: [`${process.env.BASE_URL}`, 'http://localhost:3000'],
   methods: 'GET, PUT, DELETE, POST',
 };
 
