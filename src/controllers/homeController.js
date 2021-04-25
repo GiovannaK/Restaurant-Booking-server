@@ -36,7 +36,7 @@ exports.search = async (req, res) => {
         { companyName: { $regex: new RegExp(q, 'i') } },
         { address: { $regex: new RegExp(q, 'i') } },
       ],
-    });
+    }).populate('images');
 
     if (!resultSearch) {
       return res.status(400).json({
