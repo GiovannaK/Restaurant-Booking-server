@@ -3,8 +3,13 @@
 ## API: https://getyourtable.herokuapp.com
 ## CLIENT: https://getyourtable.netlify.app
 ### Demo Credentials
-- E-MAIL: 
-- PASSWORD: 
+#### Normal user
+- E-MAIL: yeway40067@goqoez.com
+- PASSWORD: getyourtable
+
+#### Restaurant manager user
+- E-MAIL: mimepam980@httptuan.com
+- PASSWORD: getyourtable
 ---
 
 ### Table of Contents
