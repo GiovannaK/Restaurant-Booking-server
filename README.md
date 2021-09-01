@@ -2,6 +2,7 @@
 
 ## API: https://getyourtable.herokuapp.com
 ## CLIENT: https://getyourtable.netlify.app
+## CLIENT REPOSITORY: https://github.com/GiovannaK/Restaurant-Booking-Client
 ### Demo Credentials
 #### Normal user
 - E-MAIL: yeway40067@goqoez.com
